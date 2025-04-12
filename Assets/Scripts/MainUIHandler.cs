@@ -29,6 +29,7 @@ public class MainUIHandler : MonoBehaviour
 
     public void Exit()
     {
+        DataController.Instance.SaveBestPlayerAndScore(); 
         #if UNITY_EDITOR
             EditorApplication.ExitPlaymode();
         #else

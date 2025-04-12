@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
@@ -45,7 +46,8 @@ public class DataController : MonoBehaviour
             PlayerName = playerNameObj.GetComponent<TMP_Text>();
         if (MBestScoreAndName != null)
             MainBestScoreAndName = MainBestScoreAndName = MBestScoreAndName.GetComponent<Text>();
-            
+        
+        LoadBestPlayerAndScore();
         UpdatePlayerName();
         UpdateBestPlayerNameAndScore();
         UpdateMainBestScoreAndName();
@@ -83,6 +85,40 @@ public class DataController : MonoBehaviour
             bestPlayerName = playerName;
             bestPlayerScore = newPlayerScore;
             UpdateBestPlayerNameAndScore();
+            SaveBestPlayerAndScore();
         }
-    } 
+    }
+
+    [System.Serializable]
+    class SaveData
+    {
+        public string bestPlayerName;
+        public int bestPlayerScore;
+    }
+
+    public void SaveBestPlayerAndScore()
+    {
+        SaveData data = new SaveData();
+        data.bestPlayerName = bestPlayerName;
+        data.bestPlayerScore = bestPlayerScore;
+
+        string json = JsonUtility.ToJson(data);
+    
+        File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
+    }
+
+    public void LoadBestPlayerAndScore()
+    {
+        string path = Application.persistentDataPath + "/savefile.json";
+        Debug.Log("Save file path: " + Application.persistentDataPath + "/savefile.json");
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            SaveData data = JsonUtility.FromJson<SaveData>(json);
+
+            bestPlayerName = data.bestPlayerName;
+            bestPlayerScore = data.bestPlayerScore;
+        }
+    }
+
 }
