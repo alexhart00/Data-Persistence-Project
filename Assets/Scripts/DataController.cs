@@ -110,7 +110,6 @@ public class DataController : MonoBehaviour
     public void LoadBestPlayerAndScore()
     {
         string path = Application.persistentDataPath + "/savefile.json";
-        Debug.Log("Save file path: " + Application.persistentDataPath + "/savefile.json");
         if (File.Exists(path))
         {
             string json = File.ReadAllText(path);
